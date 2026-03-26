@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx:*)",
+      "Bash(printf '\\\\n\\\\n')",
+      "Bash(yes n:*)",
+      "WebSearch",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run:*)",
+      "Bash(\"/Users/umesha/Desktop/untitled folder/my-app/.env.local\")",
+      "Bash(find '/Users/umesha/Desktop/untitled folder/my-app/app/store' -name *.ts -o -name *.tsx)",
+      "Bash(xargs ls:*)",
+      "Bash(xargs -I {} basename {})",
+      "Bash(curl:*)",
+      "Bash(TOKEN=\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5YzRjMDM3MGVjMjY2MTkwMzViMGE0MSIsImlhdCI6MTc3NDUwMTk0NCwiZXhwIjoxNzc1MTA2NzQ0fQ.YnfGDUlfTXdTi_a0Jm4SbWoVKCUIYDaTo6BIOs_NvG4\")",
+      "Bash(grep -r \"socket\\\\|Socket\\\\.IO\\\\|io\\(\" '/Users/umesha/Desktop/untitled folder/my-app' --include=*.ts --include=*.tsx --include=*.js)",
+      "Bash(grep -r \"emit\\\\|on\\\\|listen\" '/Users/umesha/Desktop/untitled folder/my-app/app' --include=*.ts --include=*.tsx)",
+      "mcp__ide__getDiagnostics",
+      "Bash(git --version)",
+      "Bash(git config:*)",
+      "Bash(ssh -T git@github.com)",
+      "Bash(echo $GITHUB_TOKEN)"
+    ]
+  },
+  "alwaysThinkingEnabled": true
+}

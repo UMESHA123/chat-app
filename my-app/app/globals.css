@@ -1,0 +1,106 @@
+@import "tailwindcss";
+
+:root {
+  --background: #111111;
+  --foreground: #ffffff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
+}
+
+/* Thin scrollbars */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #3f3f3f; }
+::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* Typing indicator dots */
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+  30% { transform: translateY(-4px); opacity: 1; }
+}
+.typing-dot {
+  animation: typingBounce 1.2s ease-in-out infinite;
+}
+.typing-dot:nth-child(2) { animation-delay: 0.15s; }
+.typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+/* ── Neobrutalist reusables ───────────────────────────────────────────────── */
+
+/* Primary button — #ae7aff with hard press shadow */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #ae7aff;
+  color: #000;
+  font-weight: 700;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid #4f4e4e;
+  box-shadow: 5px 5px 0px 0px #4f4e4e;
+  transition: all 150ms ease-in-out;
+  cursor: pointer;
+  user-select: none;
+}
+.btn-primary:active:not(:disabled) {
+  transform: translate(5px, 5px);
+  box-shadow: 0px 0px 0px 0px #4f4e4e;
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Danger button — red with same shadow */
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: #ff4d4d;
+  color: #000;
+  font-weight: 700;
+  padding: 0.75rem 1.25rem;
+  border: 2px solid #4f4e4e;
+  box-shadow: 5px 5px 0px 0px #4f4e4e;
+  transition: all 150ms ease-in-out;
+  cursor: pointer;
+  user-select: none;
+}
+.btn-danger:active:not(:disabled) {
+  transform: translate(5px, 5px);
+  box-shadow: 0px 0px 0px 0px #4f4e4e;
+}
+
+/* Input field */
+.neo-input {
+  width: 100%;
+  background: #0f0f0f;
+  color: #fff;
+  border: 2px solid #4f4e4e;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 150ms ease-in-out;
+}
+.neo-input::placeholder { color: #555; }
+.neo-input:focus {
+  border-color: #ae7aff;
+}
+
+/* Card / modal panel */
+.neo-card {
+  background: #1a1a1a;
+  border: 2px solid #4f4e4e;
+}
