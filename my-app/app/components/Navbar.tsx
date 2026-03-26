@@ -61,7 +61,7 @@ export default function Navbar() {
   const avatarColor = getAvatarColor(displayName);
 
   return (
-    <nav className="flex items-center justify-between px-6 h-[60px] bg-[#111111] border-b-2 border-[#4f4e4e] shrink-0">
+    <nav className="flex items-center justify-between px-4 md:px-6 h-[60px] bg-[#111111] border-b-2 border-[#4f4e4e] shrink-0">
       <h1 className="text-xl font-bold text-white tracking-tight">BlinkChat</h1>
 
       <div className="flex items-center gap-4">
@@ -80,7 +80,7 @@ export default function Navbar() {
           </button>
 
           {notifOpen && (
-            <div className="absolute right-0 top-full mt-2 w-80 neo-card z-50 overflow-hidden">
+            <div className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 neo-card z-50 overflow-hidden">
               {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 border-b-2 border-[#4f4e4e]">
                 <span className="text-sm font-bold text-white">Notifications</span>
@@ -161,10 +161,10 @@ export default function Navbar() {
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setDropdownOpen((o) => !o)}
-            className="btn-primary text-sm px-4 py-2"
+            className="btn-primary text-sm px-3 py-2 md:px-4"
           >
             <PlusCircle size={16} />
-            Create a chat
+            <span className="hidden sm:inline">Create a chat</span>
           </button>
 
           {dropdownOpen && (

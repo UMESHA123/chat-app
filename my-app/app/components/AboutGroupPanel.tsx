@@ -33,7 +33,7 @@ export default function AboutGroupPanel({ conv }: { conv: ApiConversation }) {
   const extra = conv.participants.length - shownAvatars.length;
 
   return (
-    <div className="w-[440px] shrink-0 flex flex-col bg-[#111111] border-l-2 border-[#4f4e4e]">
+    <div className="fixed inset-0 z-40 md:relative md:inset-auto md:z-auto w-full md:w-[440px] md:shrink-0 flex flex-col bg-[#111111] border-l-2 border-[#4f4e4e]">
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b-2 border-[#4f4e4e]">
         <h2 className="text-white font-bold text-base">About Group</h2>

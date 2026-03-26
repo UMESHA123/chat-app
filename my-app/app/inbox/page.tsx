@@ -80,8 +80,12 @@ export default function InboxPage() {
         ) : (
           /* ── Inbox with conversations ── */
           <>
-            <ChatSidebar />
-            <div className="flex flex-1 min-w-0">
+            {/* Sidebar — full width on mobile, fixed 320px on desktop */}
+            <div className={`${selectedConv ? "hidden md:flex" : "flex"} flex-col w-full md:w-[320px] md:shrink-0`}>
+              <ChatSidebar />
+            </div>
+            {/* Chat area — hidden on mobile when no conv selected */}
+            <div className={`${selectedConv ? "flex" : "hidden md:flex"} flex-1 min-w-0`}>
               {selectedConv ? (
                 <>
                   <ChatWindow conv={selectedConv} />

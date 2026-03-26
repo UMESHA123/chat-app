@@ -118,7 +118,7 @@ export default function ChatSidebar() {
   });
 
   return (
-    <aside className="w-[320px] shrink-0 flex flex-col border-r-2 border-[#4f4e4e] bg-[#111111]">
+    <aside className="flex-1 flex flex-col border-r-2 border-[#4f4e4e] bg-[#111111]">
       {/* Search + Filter */}
       <div className="flex items-center gap-2 px-4 py-3 border-b-2 border-[#4f4e4e]">
         <div className="flex-1 flex items-center gap-2 bg-[#0f0f0f] border-2 border-[#4f4e4e] px-3 py-2">
