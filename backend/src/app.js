@@ -36,7 +36,7 @@ app.use(
 app.use(express.json());
 app.use(passport.initialize());
 
-const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, standardHeaders: true, legacyHeaders: false, validate: { trustProxy: false, xForwardedForHeader: false } });
+const authLimiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 20, standardHeaders: true, legacyHeaders: false, validate: false });
 
 initPassport();
 
