@@ -147,7 +147,7 @@ function FileChip({ file, onRemove }: { file: File; onRemove: () => void }) {
 }
 
 /* ── ChatWindow ────────────────────────────────────────────────────────────── */
-export default function ChatWindow({ conv }: { conv: ApiConversation }) {
+export default function ChatWindow({ conv, isMobile = false }: { conv: ApiConversation; isMobile?: boolean }) {
   const { token, user } = useAuthStore();
   const { getMessages, fetchMessages, addMessage, leaveConversation, selectConversation } = useConversationStore();
   const toggleAboutGroup = useUIStore((s) => s.toggleAboutGroup);
@@ -336,15 +336,17 @@ export default function ChatWindow({ conv }: { conv: ApiConversation }) {
     <div className="flex-1 flex flex-col min-w-0 bg-[#111111]">
       {/* Header */}
       <div className="flex items-center justify-between px-3 md:px-5 h-[60px] border-b-2 border-[#4f4e4e] shrink-0">
-        <div className="flex items-center gap-2 md:gap-3">
+        <div className="flex items-center gap-2">
           {/* Back button — mobile only */}
-          <button
-            onClick={() => selectConversation(null)}
-            className="md:hidden p-1.5 text-gray-400 hover:text-white transition-colors shrink-0"
-          >
-            <ChevronLeft size={22} />
-          </button>
-          <Avatar name={convName} color={convColor} size={38}
+          {isMobile && (
+            <button
+              onClick={() => selectConversation(null)}
+              className="p-1.5 -ml-1 text-gray-400 hover:text-white transition-colors shrink-0"
+            >
+              <ChevronLeft size={22} />
+            </button>
+          )}
+          <Avatar name={convName} color={convColor} size={isMobile ? 34 : 38}
             showOnline={conv.type === "direct"} isOnline={partner?.isOnline} />
           <div>
             <p className="text-sm font-bold text-white leading-tight">{convName}</p>
@@ -443,7 +445,7 @@ export default function ChatWindow({ conv }: { conv: ApiConversation }) {
 
       {/* Input bar */}
       <div className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-3 border-t-2 border-[#4f4e4e] shrink-0">
-        <Avatar name={user?.username ?? "Me"} color={getAvatarColor(user?.username ?? "Me")} size={36} className="hidden sm:block shrink-0" />
+        {!isMobile && <Avatar name={user?.username ?? "Me"} color={getAvatarColor(user?.username ?? "Me")} size={36} className="shrink-0" />}
 
         <div className="flex-1 flex items-center bg-[#0f0f0f] border-2 border-[#4f4e4e] px-4 py-2.5 gap-3 min-w-0">
           <input

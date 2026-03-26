@@ -10,7 +10,7 @@ import { useConversationStore } from "../store/conversationStore";
 import { useNotificationStore } from "../store/notificationStore";
 import { getAvatarColor, formatTime } from "../lib/helpers";
 
-export default function Navbar() {
+export default function Navbar({ isMobile = false }: { isMobile?: boolean }) {
   const router = useRouter();
   const { user, token, logout } = useAuthStore();
   const { setModal } = useUIStore();
@@ -62,25 +62,28 @@ export default function Navbar() {
 
   return (
     <nav className="flex items-center justify-between px-4 md:px-6 h-[60px] bg-[#111111] border-b-2 border-[#4f4e4e] shrink-0">
-      <h1 className="text-xl font-bold text-white tracking-tight">BlinkChat</h1>
+      <h1 className="text-lg md:text-xl font-bold text-white tracking-tight">BlinkChat</h1>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-4">
         {/* Bell + notification dropdown */}
         <div className="relative" ref={notifRef}>
           <button
             onClick={() => setNotifOpen((o) => !o)}
-            className="relative p-1.5 hover:bg-white/5 transition-colors"
+            className="relative p-2 hover:bg-white/5 transition-colors"
           >
             <Bell size={20} className="text-white" />
             {unreadCount > 0 && (
-              <span className="absolute -top-0.5 -right-0.5 bg-[#ae7aff] text-black text-[10px] font-bold min-w-[18px] h-[18px] flex items-center justify-center px-0.5 leading-none">
+              <span className="absolute top-0.5 right-0.5 bg-[#ae7aff] text-black text-[10px] font-bold min-w-[16px] h-[16px] flex items-center justify-center px-0.5 leading-none">
                 {unreadCount > 99 ? "99+" : unreadCount}
               </span>
             )}
           </button>
 
           {notifOpen && (
-            <div className="absolute right-0 top-full mt-2 w-[calc(100vw-2rem)] sm:w-80 neo-card z-50 overflow-hidden">
+            <div
+              className="absolute right-0 top-full mt-2 neo-card z-50 overflow-hidden"
+              style={{ width: isMobile ? "calc(100vw - 2rem)" : "320px" }}
+            >
               {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 border-b-2 border-[#4f4e4e]">
                 <span className="text-sm font-bold text-white">Notifications</span>
@@ -96,7 +99,7 @@ export default function Navbar() {
               </div>
 
               {/* List */}
-              <div className="max-h-80 overflow-y-auto">
+              <div className="max-h-[60vh] overflow-y-auto">
                 {notifications.length === 0 ? (
                   <p className="text-center text-gray-500 text-xs py-8">No notifications yet</p>
                 ) : (
@@ -108,7 +111,6 @@ export default function Navbar() {
                         !n.isRead ? "bg-[#ae7aff]/5" : ""
                       }`}
                     >
-                      {/* Unread dot */}
                       <span
                         className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${
                           !n.isRead ? "bg-[#ae7aff]" : "bg-transparent"
@@ -137,7 +139,7 @@ export default function Navbar() {
             onClick={() => setProfileOpen((o) => !o)}
             className="border-2 border-transparent hover:border-[#ae7aff] transition-colors"
           >
-            <Avatar name={displayName} color={avatarColor} size={34} showOnline isOnline />
+            <Avatar name={displayName} color={avatarColor} size={32} showOnline isOnline />
           </button>
 
           {profileOpen && (
@@ -157,18 +159,18 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Create a chat */}
+        {/* Create a chat — icon-only on mobile, full button on desktop */}
         <div className="relative" ref={dropdownRef}>
           <button
             onClick={() => setDropdownOpen((o) => !o)}
-            className="btn-primary text-sm px-3 py-2 md:px-4"
+            className="btn-primary text-sm px-2.5 py-2 md:px-4"
           >
-            <PlusCircle size={16} />
-            <span className="hidden sm:inline">Create a chat</span>
+            <PlusCircle size={18} />
+            {!isMobile && <span>New chat</span>}
           </button>
 
           {dropdownOpen && (
-            <div className="absolute right-0 top-full mt-2 w-52 neo-card z-50 overflow-hidden">
+            <div className="absolute right-0 top-full mt-2 w-48 neo-card z-50 overflow-hidden">
               <button
                 className="flex items-center gap-3 w-full px-4 py-3 text-sm text-white font-medium hover:bg-white/5 transition-colors border-b-2 border-[#4f4e4e]"
                 onClick={() => { setModal("chat"); setDropdownOpen(false); }}
@@ -181,7 +183,7 @@ export default function Navbar() {
                 onClick={() => { setModal("group"); setDropdownOpen(false); }}
               >
                 <Users size={15} className="text-[#ae7aff]" />
-                Create a Group
+                Create Group
               </button>
             </div>
           )}

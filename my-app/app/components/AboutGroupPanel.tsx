@@ -9,7 +9,7 @@ import { conversationApi } from "../lib/api";
 import { getAvatarColor } from "../lib/helpers";
 import type { ApiConversation } from "../types/api";
 
-export default function AboutGroupPanel({ conv }: { conv: ApiConversation }) {
+export default function AboutGroupPanel({ conv, isMobile = false }: { conv: ApiConversation; isMobile?: boolean }) {
   const setAboutGroupOpen = useUIStore((s) => s.setAboutGroupOpen);
   const { user, token } = useAuthStore();
   const upsertConversation = useConversationStore((s) => s.upsertConversation);
@@ -33,7 +33,12 @@ export default function AboutGroupPanel({ conv }: { conv: ApiConversation }) {
   const extra = conv.participants.length - shownAvatars.length;
 
   return (
-    <div className="fixed inset-0 z-40 md:relative md:inset-auto md:z-auto w-full md:w-[440px] md:shrink-0 flex flex-col bg-[#111111] border-l-2 border-[#4f4e4e]">
+    <div
+      className="flex flex-col bg-[#111111] border-l-2 border-[#4f4e4e]"
+      style={isMobile
+        ? { position: "fixed", inset: 0, zIndex: 40, width: "100%" }
+        : { width: "440px", flexShrink: 0 }}
+    >
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-4 border-b-2 border-[#4f4e4e]">
         <h2 className="text-white font-bold text-base">About Group</h2>

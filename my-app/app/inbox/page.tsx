@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PlusCircle } from "lucide-react";
 import Navbar from "../components/Navbar";
@@ -23,6 +23,15 @@ export default function InboxPage() {
   const { fetchNotifications } = useNotificationStore();
   useSocket();
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
   useEffect(() => {
     if (token) fetchNotifications(token);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -39,39 +48,43 @@ export default function InboxPage() {
   const conversations = getConversationsSorted();
   const selectedConv = selectedId ? byId[selectedId] : null;
 
+  // On mobile: show sidebar OR chat, never both
+  // On desktop: show both side by side
+  const showSidebar = !isMobile || !selectedConv;
+  const showChat = !isMobile || !!selectedConv;
+
   if (!token || !user) return null;
 
   return (
     <div className="h-screen flex flex-col bg-[#111111] overflow-hidden">
-      <Navbar />
+      <Navbar isMobile={isMobile} />
 
-      <div className="flex flex-1 min-h-0">
+      <div className="flex flex-1 min-h-0 overflow-hidden">
         {conversations.length === 0 ? (
           /* ── Empty inbox ── */
-          <div className="flex-1 flex flex-col items-center justify-center gap-8 text-center px-4">
-            {/* Inbox tray icon */}
+          <div className="flex-1 flex flex-col items-center justify-center gap-8 text-center px-6">
             <svg
-              width="80" height="80" viewBox="0 0 24 24" fill="none"
+              width="72" height="72" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" strokeWidth="1.2"
               strokeLinecap="round" strokeLinejoin="round"
-              className="text-white/40"
+              className="text-white/30"
             >
               <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
               <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
             </svg>
 
             <div>
-              <h2 className="text-[2.4rem] font-extrabold text-white leading-tight mb-3">
-                No chats found?
+              <h2 className="text-3xl font-extrabold text-white leading-tight mb-2">
+                No chats yet
               </h2>
-              <p className="text-gray-400 text-sm max-w-[260px] mx-auto leading-relaxed">
-                Try to initiate chat with your saved contacts by clicking the button below
+              <p className="text-gray-500 text-sm max-w-[240px] mx-auto leading-relaxed">
+                Start a conversation with your contacts
               </p>
             </div>
 
             <button
               onClick={() => setModal("chat")}
-              className="btn-primary mt-2 text-sm px-6 py-3"
+              className="btn-primary text-sm px-6 py-3"
             >
               <PlusCircle size={17} />
               Create a chat
@@ -80,34 +93,42 @@ export default function InboxPage() {
         ) : (
           /* ── Inbox with conversations ── */
           <>
-            {/* Sidebar — full width on mobile, fixed 320px on desktop */}
-            <div className={`${selectedConv ? "hidden md:flex" : "flex"} flex-col w-full md:w-[320px] md:shrink-0`}>
-              <ChatSidebar />
-            </div>
-            {/* Chat area — hidden on mobile when no conv selected */}
-            <div className={`${selectedConv ? "flex" : "hidden md:flex"} flex-1 min-w-0`}>
-              {selectedConv ? (
-                <>
-                  <ChatWindow conv={selectedConv} />
-                  {aboutGroupOpen && selectedConv.type === "group" && (
-                    <AboutGroupPanel conv={selectedConv} />
-                  )}
-                </>
-              ) : (
-                <div className="flex-1 flex flex-col items-center justify-center text-center px-4 gap-3">
-                  <svg
-                    width="52" height="52" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" strokeWidth="1.2"
-                    strokeLinecap="round" strokeLinejoin="round"
-                    className="text-white/15"
-                  >
-                    <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
-                    <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
-                  </svg>
-                  <p className="text-gray-600 text-sm">Select a conversation to start chatting</p>
-                </div>
-              )}
-            </div>
+            {/* Sidebar */}
+            {showSidebar && (
+              <div
+                style={{ width: isMobile ? "100%" : "320px" }}
+                className="shrink-0 flex flex-col"
+              >
+                <ChatSidebar />
+              </div>
+            )}
+
+            {/* Chat area */}
+            {showChat && (
+              <div className="flex flex-1 min-w-0">
+                {selectedConv ? (
+                  <>
+                    <ChatWindow conv={selectedConv} isMobile={isMobile} />
+                    {aboutGroupOpen && selectedConv.type === "group" && (
+                      <AboutGroupPanel conv={selectedConv} isMobile={isMobile} />
+                    )}
+                  </>
+                ) : (
+                  <div className="flex-1 flex flex-col items-center justify-center text-center px-4 gap-3">
+                    <svg
+                      width="52" height="52" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" strokeWidth="1.2"
+                      strokeLinecap="round" strokeLinejoin="round"
+                      className="text-white/15"
+                    >
+                      <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+                      <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+                    </svg>
+                    <p className="text-gray-600 text-sm">Select a conversation to start chatting</p>
+                  </div>
+                )}
+              </div>
+            )}
           </>
         )}
       </div>
